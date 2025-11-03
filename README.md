@@ -60,5 +60,5 @@ http://localhost:8080/api/rewards/calculate?customerId=CUST001&months=3
     ]
 }
 
-## 🚀 Run the Application
+##Run the Application
 mvn spring-boot:run
