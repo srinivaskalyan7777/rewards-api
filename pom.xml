@@ -12,15 +12,15 @@
     <name>rewardsapi</name>
 
     <parent>
-        <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.7.18</version> <!-- ✅ Java 8 compatible version -->
-        <relativePath/>
-    </parent>
+  <groupId>org.springframework.boot</groupId>
+  <artifactId>spring-boot-starter-parent</artifactId>
+  <version>3.3.4</version>
+</parent>
 
-    <properties>
-        <java.version>1.8</java.version>
-    </properties>
+<properties>
+  <java.version>17</java.version>
+</properties>
+
 
     <dependencies>
         <!-- Spring Web for REST APIs -->

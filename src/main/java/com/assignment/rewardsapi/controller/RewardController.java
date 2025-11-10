@@ -1,38 +1,39 @@
 package com.assignment.rewardsapi.controller;
 
+import com.assignment.rewardsapi.exception.RewardException;
 import com.assignment.rewardsapi.model.CustomerRewardResponse;
-import com.assignment.rewardsapi.model.Transaction;
 import com.assignment.rewardsapi.service.RewardService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/rewards")
 public class RewardController {
 
-    private static final Logger logger = LoggerFactory.getLogger(RewardController.class);
+    private final RewardService rewardService;
 
     @Autowired
-    private RewardService rewardService;
+    public RewardController(RewardService rewardService) {
+        this.rewardService = rewardService;
+    }
 
-    @PostMapping("/calculate")
-    public ResponseEntity<CustomerRewardResponse> calculateRewards(
+    /**
+     * GET /api/rewards?customerId=...&months=...
+     * months is optional and defaults to 3
+     */
+    @GetMapping
+    public CustomerRewardResponse getRewards(
             @RequestParam String customerId,
-            @RequestParam(defaultValue = "3") int months,
-            @RequestBody List<Transaction> transactions) {
+            @RequestParam(required = false, defaultValue = "3") int months) {
 
-        logger.info("Calculating rewards for customerId={} for last {} months", customerId, months);
-
+        // Basic validation at controller level (service also validates)
         if (months <= 0) {
-            throw new IllegalArgumentException("Timeframe (months) must be greater than 0");
+            throw new RewardException("Timeframe (months) must be greater than 0.");
+        }
+        if (months > 3) {
+            throw new RewardException("Timeframe (months) must not exceed 3.");
         }
 
-        CustomerRewardResponse response = rewardService.calculateRewards(customerId, months, transactions);
-        return ResponseEntity.ok(response);
+        return rewardService.calculateRewards(customerId, months);
     }
 }

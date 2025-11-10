@@ -1,77 +1,61 @@
 package com.assignment.rewardsapi.service;
 
+import com.assignment.rewardsapi.exception.RewardException;
 import com.assignment.rewardsapi.model.CustomerRewardResponse;
-import com.assignment.rewardsapi.model.Transaction;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.time.LocalDate;
-import java.util.Arrays;
-import java.util.List;
-
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * Unit tests for RewardService.
+ * Uses the in-memory seeded data from RewardService.
+ */
 class RewardServiceTest {
 
     private RewardService rewardService;
 
     @BeforeEach
-    void setup() {
+    void setUp() {
         rewardService = new RewardService();
     }
 
     @Test
-    void testCalculateRewardsWithinTimeframe() {
-        List<Transaction> transactions = Arrays.asList(
-                new Transaction("T1", LocalDate.now().minusDays(10), 120.0),
-                new Transaction("T2", LocalDate.now().minusDays(20), 75.0),
-                new Transaction("T3", LocalDate.now().minusDays(95), 200.0) // should be excluded (beyond 3 months)
-        );
+    void calculateRewards_forKnownCustomer_overThreeMonths_returnsExpectedTotal() {
+        // CUST001 has three seeded transactions in RewardService's static data:
+        // amounts: 120.00 (points 90), 75.00 (points 25), 200.00 (points 250)
+        // total expected points = 90 + 25 + 250 = 365
+        CustomerRewardResponse resp = rewardService.calculateRewards("CUST001", 3);
 
-        CustomerRewardResponse response = rewardService.calculateRewards("CUST001", 3, transactions);
-
-        assertNotNull(response);
-        assertEquals("CUST001", response.getCustomerId());
-        assertEquals(2, response.getTransactionCount()); // Only two valid transactions
-        assertTrue(response.getTotalRewardPoints() > 0);
+        assertNotNull(resp, "Response should not be null");
+        assertEquals("CUST001", resp.getCustomerId());
+        assertEquals(365, resp.getTotalRewards(), "Total reward points for CUST001 over 3 months should be 365");
+        assertNotNull(resp.getTransactions(), "Transactions list should be present");
+        assertTrue(resp.getTransactions().size() >= 1, "At least one transaction should be returned");
     }
 
     @Test
-    void testCalculateRewardsPointsCalculationLogic() {
-        // amount = 120 -> 50 + (20 * 2) = 90 points
-        // amount = 75 -> 25 points
-        // amount = 40 -> 0 points
-        List<Transaction> transactions = Arrays.asList(
-                new Transaction("T1", LocalDate.now().minusDays(10), 120.0),
-                new Transaction("T2", LocalDate.now().minusDays(20), 75.0),
-                new Transaction("T3", LocalDate.now().minusDays(5), 40.0)
-        );
-
-        CustomerRewardResponse response = rewardService.calculateRewards("CUST002", 3, transactions);
-
-        assertEquals(115, response.getTotalRewardPoints());
-    }
-
-    @Test
-    void testCalculateRewardsForEmptyTransactions() {
-        List<Transaction> transactions = Arrays.asList();
-
-        CustomerRewardResponse response = rewardService.calculateRewards("CUST003", 3, transactions);
-
-        assertEquals(0, response.getTransactionCount());
-        assertEquals(0, response.getTotalRewardPoints());
-    }
-
-    @Test
-    void testNegativeMonthsThrowsException() {
-        List<Transaction> transactions = Arrays.asList(
-                new Transaction("T1", LocalDate.now(), 100.0)
-        );
-
-        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
-            rewardService.calculateRewards("CUST004", -1, transactions);
+    void calculateRewards_monthsZero_throwsRewardException() {
+        RewardException ex = assertThrows(RewardException.class, () -> {
+            rewardService.calculateRewards("CUST001", 0);
         });
+        assertTrue(ex.getMessage().toLowerCase().contains("months"), "Exception message should mention months");
+    }
 
-        assertEquals("Timeframe (months) must be greater than 0", exception.getMessage());
+    @Test
+    void calculateRewards_monthsMoreThanThree_throwsRewardException() {
+        RewardException ex = assertThrows(RewardException.class, () -> {
+            rewardService.calculateRewards("CUST001", 4);
+        });
+        assertTrue(ex.getMessage().toLowerCase().contains("not exceed") || ex.getMessage().toLowerCase().contains("cannot exceed"),
+                "Exception message should indicate months cannot exceed 3");
+    }
+
+    @Test
+    void calculateRewards_unknownCustomer_throwsRewardException() {
+        RewardException ex = assertThrows(RewardException.class, () -> {
+            rewardService.calculateRewards("UNKNOWN", 3);
+        });
+        assertTrue(ex.getMessage().toLowerCase().contains("customer"), "Exception message should mention customer not found");
     }
 }
