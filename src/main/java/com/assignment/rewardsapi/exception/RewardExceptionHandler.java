@@ -1,4 +1,4 @@
-package com.assignment.rewardsapi.controller;
+package com.assignment.rewardsapi.exception;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
