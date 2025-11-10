@@ -38,8 +38,8 @@ http://localhost:8080/api/rewards?customerId=CUST001&months=3
 ### **Parameters**
 | Parameter | Type | Required | Description |
 |------------|------|-----------|-------------|
-| `customerId` | String | ✅ Yes | Unique identifier of the customer |
-| `months` | Integer | ❌ No | Number of months to consider (default = 3, max = 3) |
+| `customerId` | String | Yes | Unique identifier of the customer |
+| `months` | Integer | No | Number of months to consider (default = 3, max = 3) |
 
 ---
 
@@ -82,11 +82,6 @@ http://localhost:8080/api/rewards?customerId=CUST001&months=3
   ]
 }
 
+##Run the Application
 
-## Testing API using Postman:
-
--Choose GET as the request method.
--Enter the URL:
-	http://localhost:8080/api/rewards/calculate?customerId=CUST001&months=3
--Go to the Body tab → select raw → choose JSON.
--Paste the sample request body and click Send.
+mvn spring-boot:run
