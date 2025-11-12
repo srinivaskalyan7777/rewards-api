@@ -1,17 +1,18 @@
 package com.assignment.rewardsapi.model;
 
 import java.time.LocalDate;
+import java.math.*;
 
 public class Transaction {
 
     private String transactionId;
     private String customerId;
     private LocalDate date;
-    private double amount;
+    private BigDecimal amount;
 
     public Transaction() {}
 
-    public Transaction(String transactionId, String customerId, LocalDate date, double amount) {
+    public Transaction(String transactionId, String customerId, LocalDate date, BigDecimal amount) {
         this.transactionId = transactionId;
         this.customerId = customerId;
         this.date = date;
@@ -27,6 +28,6 @@ public class Transaction {
     public LocalDate getDate() { return date; }
     public void setDate(LocalDate date) { this.date = date; }
 
-    public double getAmount() { return amount; }
-    public void setAmount(double amount) { this.amount = amount; }
+    public BigDecimal getAmount() { return amount; }
+    public void setAmount(BigDecimal amount) { this.amount = amount; }
 }

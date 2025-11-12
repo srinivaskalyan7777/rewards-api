@@ -1,12 +1,11 @@
 package com.assignment.rewardsapi.exception;
 
+/**
+ * Custom exception for business rule or validation errors
+ * in reward calculations.
+ */
 public class RewardException extends RuntimeException {
-    /**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
-	public RewardException(String message) {
+    public RewardException(String message) {
         super(message);
     }
 }
