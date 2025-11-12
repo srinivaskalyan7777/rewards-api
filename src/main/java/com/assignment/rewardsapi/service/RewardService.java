@@ -7,6 +7,7 @@ import com.assignment.rewardsapi.model.Transaction;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.time.Period;
 import java.time.YearMonth;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -55,6 +56,11 @@ public class RewardService {
             throw new RewardException("Start date cannot be after end date.");
         }
 
+        Period diff = Period.between(effectiveStartDate, effectiveEndDate);
+        int totalMonths = diff.getMonths() + (diff.getYears() * 12);
+        if (totalMonths > 3 || (totalMonths == 3 && diff.getDays() > 0)) {
+            throw new RewardException("Date range cannot exceed 3 months.");
+        }
         // filter transactions
         List<Transaction> filtered = transactionsDB.stream()
                 .filter(t -> t.getCustomerId().equals(customerId)
