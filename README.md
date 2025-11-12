@@ -1,4 +1,4 @@
-# 🏆 Rewards API
+# Rewards API
 
 A **Spring Boot 3.x REST API** built with **Java 17**, designed to dynamically calculate customer reward points based on their transaction history within a configurable date range.
 
@@ -42,9 +42,9 @@ http://localhost:8080/api/rewards?customerId=CUST001&startDate=2025-08-01&endDat
 | Parameter | Type | Required | Description |
 |------------|------|-----------|-------------|
 <<<<<<< HEAD
-| `customerId` | String | ✅ Yes | Unique customer identifier |
-| `startDate` | LocalDate | ❌ No | Start of the date range (format: yyyy-MM-dd). Defaults to 3 months ago if not provided. |
-| `endDate` | LocalDate | ❌ No | End of the date range (format: yyyy-MM-dd). Defaults to today if not provided. |
+| `customerId` | String | Yes | Unique customer identifier |
+| `startDate` | LocalDate | No | Start of the date range (format: yyyy-MM-dd). Defaults to 3 months ago if not provided. |
+| `endDate` | LocalDate | No | End of the date range (format: yyyy-MM-dd). Defaults to today if not provided. |
 =======
 | `customerId` | String | Yes | Unique identifier of the customer |
 | `months` | Integer | No | Number of months to consider (default = 3, max = 3) |
