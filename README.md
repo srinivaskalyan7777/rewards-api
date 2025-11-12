@@ -18,8 +18,8 @@ A **Spring Boot 3.x REST API** built with **Java 17**, designed to dynamically c
 
 This API simulates a retailer’s **customer rewards program**, where customers earn points based on their purchase amounts:
 
-- 💰 **2 points** for every dollar spent **over $100**  
-- 💵 **1 point** for every dollar spent **between $50 and $100**
+- **2 points** for every dollar spent **over $100**  
+- **1 point** for every dollar spent **between $50 and $100**
 
 The service allows users to calculate reward points for a given **date range** or defaults to the **last 3 months** if no dates are provided.
 
@@ -41,9 +41,14 @@ http://localhost:8080/api/rewards?customerId=CUST001&startDate=2025-08-01&endDat
 
 | Parameter | Type | Required | Description |
 |------------|------|-----------|-------------|
+<<<<<<< HEAD
 | `customerId` | String | ✅ Yes | Unique customer identifier |
 | `startDate` | LocalDate | ❌ No | Start of the date range (format: yyyy-MM-dd). Defaults to 3 months ago if not provided. |
 | `endDate` | LocalDate | ❌ No | End of the date range (format: yyyy-MM-dd). Defaults to today if not provided. |
+=======
+| `customerId` | String | Yes | Unique identifier of the customer |
+| `months` | Integer | No | Number of months to consider (default = 3, max = 3) |
+>>>>>>> 42749df7b7f56dee9dabb47e532a6fe5017bf374
 
 ---
 
@@ -54,7 +59,7 @@ http://localhost:8080/api/rewards?customerId=CUST001&startDate=2025-08-01&endDat
 
 ---
 
-## 📤 Sample Response
+## Sample Response
 ```json
 {
   "customerId": "CUST001",
@@ -87,6 +92,7 @@ http://localhost:8080/api/rewards?customerId=CUST001&startDate=2025-08-01&endDat
   ]
 }
 
+<<<<<<< HEAD
 Testing the API (Postman)
 
 Select GET as the request method.
@@ -95,3 +101,8 @@ http://localhost:8080/api/rewards?customerId=CUST001&startDate=2025-08-01&endDat
 
 Click Send — you’ll receive a JSON response with calculated reward points.
 If you omit startDate and endDate, it automatically calculates rewards for the last 3 months.
+=======
+##Run the Application
+
+mvn spring-boot:run
+>>>>>>> 42749df7b7f56dee9dabb47e532a6fe5017bf374
